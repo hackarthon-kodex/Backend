@@ -1,5 +1,6 @@
 package com.example.promhk.controller;
 
+import com.example.promhk.entity.DrawingData;
 import com.example.promhk.repository.DrawingStorageRepository;
 import com.example.promhk.service.DrawingStorageService;
 import lombok.RequiredArgsConstructor;
@@ -12,6 +13,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.Date;
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -30,12 +32,17 @@ public class drawingStorageController {
     }
 
     // 다운로드
-    @GetMapping("/{createdAt}")
-    public ResponseEntity<?> downloadImage(@PathVariable("createdAt") String createdAt) {
-        byte[] downloadImage = drawingStorageService.downloadImage(createdAt);
+    @GetMapping("/{id}")
+    public ResponseEntity<?> downloadImage(@PathVariable("id") Long id) {
+        byte[] downloadImage = drawingStorageService.downloadImage(id);
+        log.info("{}", id);
         return ResponseEntity.status(HttpStatus.OK)
                 .contentType(MediaType.valueOf("image/png"))
                 .body(downloadImage);
     }
 
+    @GetMapping("/count")
+    public Long getCount() {
+        return drawingStorageService.getDrawingCount();
+    }
 }

@@ -14,6 +14,7 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 @Slf4j
 @Service
@@ -38,19 +39,23 @@ public class DrawingStorageService {
         log.info("created AT: ", drawingData.getCreatedAt());
         if (drawingData != null) {
             log.info("drawingData: {}", drawingData.getName());
-            return "file uploaded successfully : " + file.getOriginalFilename() + drawingData.getCreatedAt();
+            return "file uploaded successfully (id) : " + drawingData.getId();
         }
         return null;
     }
 
     // 이미지 파일로 압축하기
-    public byte[] downloadImage(String createdAt) {
-        log.info("here name {} ", createdAt);
-        DrawingData drawingData = drawingStorageRepository.findByCreatedAt(createdAt)
+    public byte[] downloadImage(Long id) {
+        log.info("here name {} ", id);
+        DrawingData drawingData = drawingStorageRepository.findById(id)
                 .orElseThrow(RuntimeException::new);
 
         log.info("download drawingData: {}", drawingData);
 
         return DrawingUtils.decompressImage(drawingData.getPhoto());
+    }
+
+    public long getDrawingCount() {
+        return drawingStorageRepository.count();
     }
 }

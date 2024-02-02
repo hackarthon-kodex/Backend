@@ -20,7 +20,7 @@ public class DrawingData {
     private Long id;
 
     @Lob
-    @Column(name = "photo", length = 1000)
+    @Column(name = "photo", length = 1000000)
     private byte[] photo;
 
     @Column(name = "name")
